@@ -6,17 +6,21 @@ export default function RepoList({
   data,
   loading,
   loadingNext,
+  errorMessage,
   hasNext,
   onNextClick
 }: {
   data: Repository[] | null
   loading: boolean
   loadingNext: boolean
+  errorMessage: string | null
   hasNext: boolean
   onNextClick: () => void
 }) {
   // show loading
   if (loading) return <p>Loading...</p>
+
+  if (errorMessage) return <p className="text-destructive">{errorMessage}</p>
 
   // handle repository null
   if (!data || data.length === 0)

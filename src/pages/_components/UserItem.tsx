@@ -19,6 +19,7 @@ const INITIAL_OPTIONS = {
 export default function UserItem({ username }: { username: string }) {
   const [isPending, startTransition] = useTransition()
   const [isPendingNext, startTransitionNext] = useTransition()
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [repos, setRepos] = useState<Repository[] | null>(null)
   const [isOpen, setIsOpen] = useState<boolean>(false)
   // meta pagination
@@ -32,29 +33,43 @@ export default function UserItem({ username }: { username: string }) {
 
   // fetch first 5 repos during first content open
   useEffect(() => {
-    if (isOpen && !repos) {
+    if ((isOpen && !repos) || errorMessage) {
       startTransition(async () => {
-        const response = await fetchUserRepos(username, INITIAL_OPTIONS)
-        setRepos(response.data)
-        setHasNext(response.headers.link?.includes('rel="next"'))
+        try {
+          const response = await fetchUserRepos(username, INITIAL_OPTIONS)
+          setRepos(response.data)
+          setHasNext(response.headers.link?.includes('rel="next"'))
+          setErrorMessage(null)
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error: unknown) {
+          setErrorMessage(
+            "Failed to fetch repositories, try to reopen this card"
+          )
+        }
       })
     }
-  }, [isOpen, username, repos])
+  }, [isOpen, username, repos, errorMessage])
 
   // fetch 5 more repos and merge with current repos in state
   const handleNext = () => {
-    startTransitionNext(async () => {
-      const targetPage = currentPage + 1
-      const response = await fetchUserRepos(username, {
-        params: { per_page: 5, page: targetPage }
+    try {
+      startTransitionNext(async () => {
+        const targetPage = currentPage + 1
+        const response = await fetchUserRepos(username, {
+          params: { per_page: 5, page: targetPage }
+        })
+        setRepos((prevRepos) => [
+          ...(prevRepos as Repository[]),
+          ...response.data
+        ])
+        setHasNext(response.headers.link?.includes('rel="next"'))
+        setCurrentPage(targetPage)
+        setErrorMessage(null)
       })
-      setRepos((prevRepos) => [
-        ...(prevRepos as Repository[]),
-        ...response.data
-      ])
-      setHasNext(response.headers.link?.includes('rel="next"'))
-      setCurrentPage(targetPage)
-    })
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error: unknown) {
+      setErrorMessage("Failed to fetch repositories, try to reopen this card")
+    }
   }
 
   return (
@@ -72,6 +87,7 @@ export default function UserItem({ username }: { username: string }) {
           data={repos}
           loading={isPending}
           loadingNext={isPendingNext}
+          errorMessage={errorMessage}
           hasNext={hasNext}
           onNextClick={() => {
             handleNext()
