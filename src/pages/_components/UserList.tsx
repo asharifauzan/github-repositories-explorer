@@ -13,10 +13,12 @@ function Wrapper({ children }: { children: ReactNode }) {
 export default function UserList({
   data,
   loading,
+  errorMessage,
   children
 }: {
   data: User[] | null
   loading: boolean
+  errorMessage: string | null
   children: (items: User[]) => React.ReactNode
 }) {
   // show loading during fetch
@@ -33,6 +35,9 @@ export default function UserList({
       </Wrapper>
     )
   }
+
+  // handle error while fetching
+  if (errorMessage) return <p className="text-destructive">{errorMessage}</p>
 
   // used in initial state, when data is null
   if (!data)

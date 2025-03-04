@@ -23,6 +23,7 @@ export default function HomePage() {
   const [keyword, setKeyword] = useState<string>("")
   const [userSearch, setUserSearch] = useState<string>("")
   const [results, setResults] = useState<User[] | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [isOnline, setIsOnline] = useState<boolean>(true)
 
   // check network status
@@ -44,9 +45,17 @@ export default function HomePage() {
 
   const fetchUsers = () => {
     startTransition(async () => {
-      const response = await searchUser(keyword)
-      setUserSearch(keyword)
-      setResults(response.data.items)
+      try {
+        const response = await searchUser(keyword)
+        setUserSearch(keyword)
+        setResults(response.data?.items || [])
+        setErrorMessage(null)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {
+        setErrorMessage(
+          "Failed to search users, please check your network connection"
+        )
+      }
     })
   }
 
@@ -95,7 +104,7 @@ export default function HomePage() {
         <SearchStatus search={userSearch} className="mb-2" />
       )}
 
-      <UserList data={results} loading={isPending}>
+      <UserList data={results} loading={isPending} errorMessage={errorMessage}>
         {(users) => {
           return users.map((user) => (
             <UserItem key={user.id} username={user.login} />
