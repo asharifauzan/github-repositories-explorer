@@ -1,4 +1,4 @@
-import { useState, useTransition } from "react"
+import { FormEvent, useState, useTransition } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { searchUser } from "@/lib/api/github.api"
@@ -31,7 +31,8 @@ export default function HomePage() {
     })
   }
 
-  const handleSearch = () => {
+  const handleSearch = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     fetchUsers()
   }
 
@@ -43,26 +44,24 @@ export default function HomePage() {
 
   return (
     <div id="content" className="container mx-auto p-6">
-      <div className="form flex flex-col lg:flex-row gap-1 mb-2">
-        <div className="relative">
-          <Input
-            className="h-14 !text-xl"
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value.trimStart())}
-          />
-          <X
-            className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer"
-            onClick={handleClear}
-          />
+      <form onSubmit={handleSearch}>
+        <div className="form flex flex-col lg:flex-row gap-1 mb-2">
+          <div className="relative flex-1">
+            <Input
+              className="h-14 !text-xl"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value.trimStart())}
+            />
+            <X
+              className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer"
+              onClick={handleClear}
+            />
+          </div>
+          <Button type="submit" className="h-14 text-xl" disabled={!keyword}>
+            Search
+          </Button>
         </div>
-        <Button
-          className="h-14 text-xl"
-          onClick={handleSearch}
-          disabled={!keyword}
-        >
-          Search
-        </Button>
-      </div>
+      </form>
 
       {userSearch && !isPending && (
         <SearchStatus search={userSearch} className="mb-2" />
