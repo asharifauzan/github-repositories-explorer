@@ -2,6 +2,8 @@
 
 React + Vite application that allows users for search github profile and display their repositories.
 
+demo: [https://github-repositories-explorer-theta.vercel.app](https://github-repositories-explorer-theta.vercel.app)
+
 ### Features
 
 - Search users by github username
