@@ -1,54 +1,38 @@
-# React + TypeScript + Vite
+## GitHub Repositories Explorer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + Vite application that allows users for search github profile and display their repositories.
 
-Currently, two official plugins are available:
+### Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Search users by github username
+- List all users repositories
+- Display description of repository
 
-## Expanding the ESLint configuration
+### Additional Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Network offline alert
+- Display first 5 repositories with "load more" function
+- Clear search
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-      tsconfigRootDir: import.meta.dirname
-    }
-  }
-})
-```
+### Technologies
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- Vite
+- React
+- Typescript
+- Axios
+- ShadcnUI
+- Eslint
+- Prettier
+- GitHub API
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x"
-import reactDom from "eslint-plugin-react-dom"
+### How to run
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    "react-x": reactX,
-    "react-dom": reactDom
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs["recommended-typescript"].rules,
-    ...reactDom.configs.recommended.rules
-  }
-})
-```
+1. Clone this repository
+2. run `yarn install` to install all dependencies
+3. run `yarn dev` to run application in development mode
+4. Open browser and navigate to `http://localhost:5173` to use application
+
+### Used API
+
+- GitHub API: https://api.github.com/search/users?q={username}&per_page=5 search users
+- GitHub API: https://api.github.com/users/{username}/repos display repositories of user
