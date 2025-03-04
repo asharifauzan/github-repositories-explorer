@@ -1,11 +1,12 @@
-import { FormEvent, useState, useTransition } from "react"
+import { FormEvent, useEffect, useState, useTransition } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { searchUser } from "@/lib/api/github.api"
 import UserList from "./_components/UserList"
 import UserItem from "./_components/UserItem"
-import { X } from "lucide-react"
+import { Wifi, X } from "lucide-react"
 import type { User } from "@/lib/api/type"
+import { Alert, AlertTitle } from "@/components/ui/alert"
 
 function SearchStatus({
   search,
@@ -22,6 +23,24 @@ export default function HomePage() {
   const [keyword, setKeyword] = useState<string>("")
   const [userSearch, setUserSearch] = useState<string>("")
   const [results, setResults] = useState<User[] | null>(null)
+  const [isOnline, setIsOnline] = useState<boolean>(true)
+
+  // check network status
+  useEffect(() => {
+    const updateNetworkStatus = () => {
+      setIsOnline(navigator.onLine)
+    }
+
+    window.addEventListener("load", updateNetworkStatus)
+    window.addEventListener("online", updateNetworkStatus)
+    window.addEventListener("offline", updateNetworkStatus)
+
+    return () => {
+      window.removeEventListener("load", updateNetworkStatus)
+      window.removeEventListener("online", updateNetworkStatus)
+      window.removeEventListener("offline", updateNetworkStatus)
+    }
+  }, [])
 
   const fetchUsers = () => {
     startTransition(async () => {
@@ -62,6 +81,15 @@ export default function HomePage() {
           </Button>
         </div>
       </form>
+
+      {!isOnline && (
+        <Alert variant="destructive" className="mb-2">
+          <Wifi className="mr-2" />
+          <AlertTitle>
+            Your network currently offline, please check the connection
+          </AlertTitle>
+        </Alert>
+      )}
 
       {userSearch && !isPending && (
         <SearchStatus search={userSearch} className="mb-2" />
