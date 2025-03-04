@@ -56,7 +56,6 @@ export default function HomePage() {
           />
         </div>
         <Button
-          variant="secondary"
           className="h-14 text-xl"
           onClick={handleSearch}
           disabled={!keyword}
