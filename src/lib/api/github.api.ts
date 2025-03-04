@@ -11,7 +11,8 @@ export const searchUser = async (keyword: string, options = {}) => {
     "/search/users",
     {
       params: {
-        q: keyword
+        q: keyword,
+        per_page: 5
       },
       ...options
     }
