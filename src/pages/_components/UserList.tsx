@@ -43,7 +43,7 @@ export default function UserList({
   if (!data)
     return (
       <Wrapper>
-        <p>Search user</p>
+        <p className="text-xl text-center">No users searched</p>
       </Wrapper>
     )
 
@@ -51,7 +51,7 @@ export default function UserList({
   if (data.length === 0)
     return (
       <Wrapper>
-        <p>No user found.</p>
+        <p className="text-xl text-center">No user found.</p>
       </Wrapper>
     )
 

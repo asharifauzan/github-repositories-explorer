@@ -77,6 +77,7 @@ export default function HomePage() {
           <div className="relative flex-1">
             <Input
               className="h-14 !text-xl"
+              placeholder="Search github username"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value.trimStart())}
             />
@@ -104,13 +105,19 @@ export default function HomePage() {
         <SearchStatus search={userSearch} className="mb-2" />
       )}
 
-      <UserList data={results} loading={isPending} errorMessage={errorMessage}>
-        {(users) => {
-          return users.map((user) => (
-            <UserItem key={user.id} username={user.login} />
-          ))
-        }}
-      </UserList>
+      {results && (
+        <UserList
+          data={results}
+          loading={isPending}
+          errorMessage={errorMessage}
+        >
+          {(users) => {
+            return users.map((user) => (
+              <UserItem key={user.id} username={user.login} />
+            ))
+          }}
+        </UserList>
+      )}
     </div>
   )
 }
