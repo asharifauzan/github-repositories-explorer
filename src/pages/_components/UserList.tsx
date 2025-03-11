@@ -4,7 +4,11 @@ import type { User } from "@/lib/api/type"
 
 function Wrapper({ children }: { children: ReactNode }) {
   return (
-    <div id="user-list" className="min-h-96 bg-slate-100 p-4 rounded-sm">
+    <div
+      id="user-list"
+      className="min-h-96 bg-slate-100 p-4 rounded-sm"
+      role="listbox"
+    >
       {children}
     </div>
   )
@@ -25,7 +29,7 @@ export default function UserList({
   if (loading) {
     return (
       <Wrapper>
-        <div className="space-y-1">
+        <div id="skeleton-loading" className="space-y-1">
           <Skeleton className="h-20" />
           <Skeleton className="h-20" />
           <Skeleton className="h-20" />
