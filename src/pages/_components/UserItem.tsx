@@ -1,4 +1,5 @@
 import { useState, useEffect, useTransition } from "react"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
 import { ChevronDown, ChevronUpIcon } from "lucide-react"
 import {
@@ -16,7 +17,13 @@ const INITIAL_OPTIONS = {
   }
 }
 
-export default function UserItem({ username }: { username: string }) {
+export default function UserItem({
+  username,
+  image
+}: {
+  username: string
+  image: string
+}) {
   const [isPending, startTransition] = useTransition()
   const [isPendingNext, startTransitionNext] = useTransition()
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -76,9 +83,15 @@ export default function UserItem({ username }: { username: string }) {
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
       <CollapsibleTrigger asChild>
         <Card>
-          <CardContent className="flex justify-between">
+          <CardContent className="flex gap-3">
+            <Avatar>
+              <AvatarImage src={image} alt={username} />
+              <AvatarFallback>{username}</AvatarFallback>
+            </Avatar>
             <p className="text-xl">{username}</p>
-            {isOpen ? <ChevronUpIcon /> : <ChevronDown />}
+            <div role="treegrid" className="ml-auto">
+              {isOpen ? <ChevronUpIcon /> : <ChevronDown />}
+            </div>
           </CardContent>
         </Card>
       </CollapsibleTrigger>

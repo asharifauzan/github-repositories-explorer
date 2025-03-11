@@ -113,7 +113,11 @@ export default function HomePage() {
         >
           {(users) => {
             return users.map((user) => (
-              <UserItem key={user.id} username={user.login} />
+              <UserItem
+                key={user.id}
+                username={user.login}
+                image={user.avatar_url}
+              />
             ))
           }}
         </UserList>
